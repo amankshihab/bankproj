@@ -30,6 +30,7 @@ public class atmgui {
 
     CardLayout card = new CardLayout();
     BorderLayout border = new BorderLayout();
+    //FlowLayout flow = new FlowLayout();
 
     atmgui(){
 
