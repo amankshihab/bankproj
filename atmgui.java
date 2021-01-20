@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.awt.BorderLayout;
 
 //End of imports
-
+//Have to add gridbag
 //start of program
 public class atmgui {
 
