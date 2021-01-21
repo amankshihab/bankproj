@@ -7,87 +7,111 @@ import javax.swing.JTextField;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.BorderLayout;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 //End of imports
-//Have to add gridbag
 //start of program
-public class atmgui {
+public class atmgui implements ActionListener{
 
+    String custno = new String();
+    String name = new String();
+
+    int pin = 0;
+    Double balance = 0.0;
+    
     JFrame frame = new JFrame("Tightwad Bank ATM");
     
-    JLabel welcome = new JLabel("Welome to Tightwad Bank!");
+    JLabel welcome = new JLabel("~$~ Welcome to Tightwad Bank! ~$~");
     
-    JLabel acc_no = new JLabel("Enter Acc no.");
+    JLabel acc_no = new JLabel("~~ Enter Acc no. ~~");
 
-    JTextField acno = new JTextField(15);
+    JTextField acno = new JTextField(30);
 
-    JPanel mainpanel = new JPanel();
     JPanel welcomepanel = new JPanel();
     JPanel pinpanel = new JPanel();
     JPanel atm = new JPanel();
 
     JButton submit = new JButton("Submit");
 
-    CardLayout card = new CardLayout();
-    BorderLayout border = new BorderLayout();
-    //FlowLayout flow = new FlowLayout();
-    GridBagLayout gridbag = new GridBagLayout();
-    GridBagConstraints gbc = new GridBagConstraints();
-
     atmgui(){
 
-        //Everything to do with the main panel
-        frame.setVisible(true);
-        frame.setLayout(card);
-        frame.setSize(500, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setResizable(false);
-        //Everything to do with the main panel ends
+        // Welcome Panel
+        welcome.setBounds(95, 10, 650, 100);    // welcome is a jlabel
+        welcome.setFont(new Font("Arial", Font.BOLD, 30));
+        welcome.setForeground(Color.CYAN);
+        welcomepanel.add(welcome);
+        
+        acc_no.setBounds(310, 200, 300, 250); // acc_no is a jlabel
+        acc_no.setFont(new Font("Verdana", Font.BOLD, 20));
+        acc_no.setForeground(Color.ORANGE);
+        welcomepanel.add(acc_no);
+        
+        acno.setBounds(310, 350, 240, 25); // acno is textfield
+        welcomepanel.add(acno);
+        acno.setForeground(Color.BLUE);
+        acno.setBackground(Color.LIGHT_GRAY);
 
-        //Everything to do with the welcomepanel
-        welcomepanel.setLayout(gridbag);
-        //gbc.gridx = 0;
-        //gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        welcome.setFont(new Font("Verdana", Font.BOLD, 20));
-        welcomepanel.add(welcome, gbc);
+        submit.setBounds(350, 390, 150, 25); // submit is a button
+        submit.addActionListener(this);
+        submit.setForeground(Color.MAGENTA);
+        submit.setBackground(Color.GREEN);
+        welcomepanel.add(submit);
         
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        acc_no.setFont(new Font("Verdana", Font.BOLD, 16));
-        welcomepanel.add(acc_no, gbc);
+        welcomepanel.setLayout(null);
+
+        welcomepanel.setBackground(Color.DARK_GRAY);
         
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        welcomepanel.add(acno, gbc);
-        
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
-        welcomepanel.add(submit, gbc);
-        //welcomepanel.setSize(400, 400);
-        //welcomepanel.setBackground();
         frame.add(welcomepanel);
-        //Everything to do with the welcomepanel ends
+        // welcome panel ends
+        
+        frame.setLayout(new CardLayout());   
+        frame.setVisible(true);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+        frame.setSize(850,700);  
+    }
 
-        //Everything to do with pin panel
-        //Everything to do with pin panel ends
+    public void actionPerformed(ActionEvent e){
+
+        try{
+            Class.forName("org.postgresql.Driver");
+        }
+        catch(Exception except){
+            System.out.println("No driver detected!");
+            System.exit(1);
+        }
+
+        String query = "SELECT * FROM atminfo where custno=" + acno.getText();
+
+        try{
+
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "<username>", "<pass>");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while(rs.next()){
+
+                try{
+                    custno = rs.getString("custno");
+                    name = rs.getString("name");
+                    pin = rs.getInt("pin");
+                    balance = rs.getDouble("balance");
+                }
+                catch(Exception except){
+                    System.err.println("Account does not exist!");
+                    System.exit(1);
+                }
+            }
+        }
+        catch(Exception except){
+            System.out.println("Could not connect to database!");
+            System.exit(1);
+        }
     }
 
     public static void main(String[] args) {
