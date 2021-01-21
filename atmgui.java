@@ -19,24 +19,12 @@ import javax.swing.Timer;
 //End of imports
 //start of program
 
-// class blinkthread extends Thread {
-
-//     public void run() {
-//         Color color[] = { Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW };
-
-//         try {
-//             welcome.setForeground()
-//             Thread.sleep(500);
-//         } 
-//         catch (InterruptedException e) {
-//             e.printStackTrace();
-//         }
-//     }
-// }
 class atmgui implements ActionListener {
 
     String custno = new String();
     String name = new String();
+
+    int i = 0;
 
     int pin = 0;
     Double balance = 0.0; // to retreive data from the db
@@ -71,6 +59,21 @@ class atmgui implements ActionListener {
         }
     });
 
+    Timer time = new Timer(500, new ActionListener(){
+
+        public void actionPerformed(ActionEvent e){
+
+            if(i == 0){
+                acc_no.setVisible(true);
+                i = 1;
+            }
+            else{
+                acc_no.setVisible(false);
+                i = 0;
+            }
+        }
+    });
+
     atmgui(){
 
         // Welcome Panel
@@ -97,7 +100,7 @@ class atmgui implements ActionListener {
         
         welcomepanel.setLayout(null);
 
-        welcomepanel.setBackground(Color.DARK_GRAY);
+        welcomepanel.setBackground(Color.black);
         
         frame.add(welcomepanel);
         // welcome panel ends
@@ -108,6 +111,7 @@ class atmgui implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
         frame.setSize(850,700); 
         timer.start(); 
+        time.start();
     }
 
     public void actionPerformed(ActionEvent e){
