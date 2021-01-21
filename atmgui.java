@@ -1,3 +1,4 @@
+
 //Importing Required Packages
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,21 +14,40 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.Timer;
 
 //End of imports
 //start of program
-public class atmgui implements ActionListener{
+
+// class blinkthread extends Thread {
+
+//     public void run() {
+//         Color color[] = { Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW };
+
+//         try {
+//             welcome.setForeground()
+//             Thread.sleep(500);
+//         } 
+//         catch (InterruptedException e) {
+//             e.printStackTrace();
+//         }
+//     }
+// }
+class atmgui implements ActionListener {
 
     String custno = new String();
     String name = new String();
 
     int pin = 0;
-    Double balance = 0.0;
-    
+    Double balance = 0.0; // to retreive data from the db
+
+    // color array
+    Color color[] = { Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.ORANGE, Color.PINK};
+
     JFrame frame = new JFrame("Tightwad Bank ATM");
-    
-    JLabel welcome = new JLabel("~$~ Welcome to Tightwad Bank! ~$~");
-    
+
+    public JLabel welcome = new JLabel("~$~ Welcome to Tightwad Bank! ~$~");
+
     JLabel acc_no = new JLabel("~~ Enter Acc no. ~~");
 
     JTextField acno = new JTextField(30);
@@ -38,12 +58,25 @@ public class atmgui implements ActionListener{
 
     JButton submit = new JButton("Submit");
 
+    public int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
+
+    Timer timer = new Timer(500, new ActionListener(){  // changes the color of welcome text
+
+        @Override
+        public void actionPerformed(ActionEvent e){
+            int i = getRandomNumber(0, 6);
+            welcome.setForeground(color[i]);
+        }
+    });
+
     atmgui(){
 
         // Welcome Panel
         welcome.setBounds(95, 10, 650, 100);    // welcome is a jlabel
         welcome.setFont(new Font("Arial", Font.BOLD, 30));
-        welcome.setForeground(Color.CYAN);
+        // welcome.setForeground(Color.CYAN);
         welcomepanel.add(welcome);
         
         acc_no.setBounds(310, 200, 300, 250); // acc_no is a jlabel
@@ -73,7 +106,8 @@ public class atmgui implements ActionListener{
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
-        frame.setSize(850,700);  
+        frame.setSize(850,700); 
+        timer.start(); 
     }
 
     public void actionPerformed(ActionEvent e){
@@ -117,5 +151,5 @@ public class atmgui implements ActionListener{
     public static void main(String[] args) {
         
         new atmgui();
-    }
+    }   
 }
