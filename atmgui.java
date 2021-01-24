@@ -41,13 +41,17 @@ class atmgui extends JFrame implements ActionListener {
     public JLabel welcome = new JLabel("~$~ Welcome to Tightwad Bank! ~$~");
 
     JLabel acc_no = new JLabel("~~ Enter Acc no. ~~");
+    JLabel acc_doesnt_exist = new JLabel("Account does not exist!");
     JLabel img = new JLabel();
+    JLabel imgpin = new JLabel();
+    JLabel enterpin = new JLabel("~~ Enter Pin: ~~");
 
     JTextField acno = new JTextField(30);
 
     JPanel welcomepanel = new JPanel();
     JPanel welcomepanel2 = new JPanel();
     JPanel pinpanel = new JPanel();
+    JPanel pinpanel2 = new JPanel();
     JPanel atm = new JPanel();
 
     JButton submit = new JButton("Submit");
@@ -114,32 +118,46 @@ class atmgui extends JFrame implements ActionListener {
         submit.setForeground(Color.MAGENTA);
         submit.setBackground(Color.GREEN);
         welcomepanel2.add(submit);
+
+        acc_doesnt_exist.setBounds(350, 420, 150, 25);
+        acc_doesnt_exist.setFont(new Font("Verdana", Font.ITALIC, 18));
+        acc_doesnt_exist.setForeground(Color.RED);
+        acc_doesnt_exist.setVisible(false);
+        welcomepanel2.add(acc_doesnt_exist);
         
         welcomepanel2.setLayout(null);
         img.setIcon(new ImageIcon("download.jpeg"));
         img.setBounds(0,0,850,700);
-        welcomepanel.add(img);
+        // welcomepanel.add(img);
+        // welcomepanel.add(welcomepanel2);
         welcomepanel2.setBounds(-10, 0, 850, 700);
         welcomepanel2.setBackground(Color.DARK_GRAY);
 
         // welcomepanel.add(welcomepanel2);
-        welcomepanel.setLayout(null);
+        // welcomepanel.setLayout(null);
 
 
         c.add(welcomepanel2);
         // welcome panel ends
 
         //pin panel
-        pinpanel.setBackground(Color.DARK_GRAY);
+        // imgpin.setIcon(new ImageIcon("download.jpeg"));
 
-        // for(int i = 0; i < 10; i++){
-        //     pinnumbers[i] = 
-        // }
+        // pinpanel.add(imgpin);
+        enterpin.setBounds(310, 200, 300, 250); // enterpin is a jlabel
+        enterpin.setFont(new Font("Verdana", Font.BOLD, 20));
+        enterpin.setForeground(Color.ORANGE);
+        imgpin.setBounds(0,0,850,700);
+        pinpanel2.add(enterpin);
+        pinpanel2.setBackground(Color.DARK_GRAY);
+        pinpanel.add(pinpanel2);
+        c.add(pinpanel);
+
         // pin panel ends
         
         
         frame.setLayout(new CardLayout()); 
-        frame.add(welcomepanel);
+        // frame.add(welcomepanel);
         frame.add(c);  
         c.setVisible(true);
         frame.setVisible(true);
@@ -150,8 +168,13 @@ class atmgui extends JFrame implements ActionListener {
         time.start();
     }
 
-    public void actionPerformed(ActionEvent e){
+    public void changevisible(){
 
+        acc_doesnt_exist.setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e){
+        
         try{
             Class.forName("org.postgresql.Driver");
         }
@@ -176,16 +199,23 @@ class atmgui extends JFrame implements ActionListener {
                     name = rs.getString("custname");
                     pin = rs.getInt("pin");
                     balance = rs.getDouble("balance");
+                    System.out.println(custno);
+                    System.out.println(name);
+                    System.out.println(pin);
+                    System.out.println(balance);
+
+                    card.next(c);
                 }
                 catch(Exception except){
-                    System.err.println("Account does not exist!");
-                    System.exit(1);
+                    // acc_doesnt_exist.setVisible(true);
+                    changevisible();
                 }
             }
         }
         catch(Exception except){
-            System.out.println("Could not connect to database!");
-            System.exit(1);
+            // System.out.println("Could not connect to database!");
+            changevisible();
+            // System.exit(1);
         }
     }
 
