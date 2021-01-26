@@ -19,6 +19,7 @@ import java.sql.Statement;
 import javax.swing.Timer;
 import java.awt.Container;
 import java.awt.CardLayout;
+import java.awt.GridLayout;
 
 //End of imports
 //start of program
@@ -44,19 +45,18 @@ class atmgui extends JFrame implements ActionListener {
     JLabel acc_doesnt_exist = new JLabel("Account does not exist!");
     JLabel img = new JLabel();
     JLabel imgpin = new JLabel();
-    JLabel enterpin = new JLabel("~~ Enter Pin: ~~");
+    JLabel enterpinlabel = new JLabel("~~ Enter Pin: ~~");
 
-    JTextField acno = new JTextField(30);
+    JTextField acno = new JTextField(15);   //to enter account number in welcome page
+    JTextField enterpin = new JTextField(15); //to enter pin number in pin page
 
     JPanel welcomepanel = new JPanel();
-    JPanel welcomepanel2 = new JPanel();
-    JPanel pinpanel = new JPanel();
-    JPanel pinpanel2 = new JPanel();
+    JPanel welcomepanel2 = new JPanel();//first panel or welcome page
+    JPanel pinpanel = new JPanel(); 
+    JPanel pinpanel2 = new JPanel(); // second panel or page to enter pin
     JPanel atm = new JPanel();
 
-    JButton submit = new JButton("Submit");
-
-    JButton pinnumbers[];
+    JButton submit = new JButton("Submit"); //submit on welcome page
 
     Container c;
 
@@ -128,30 +128,22 @@ class atmgui extends JFrame implements ActionListener {
         welcomepanel2.setLayout(null);
         img.setIcon(new ImageIcon("download.jpeg"));
         img.setBounds(0,0,850,700);
-        // welcomepanel.add(img);
-        // welcomepanel.add(welcomepanel2);
         welcomepanel2.setBounds(-10, 0, 850, 700);
         welcomepanel2.setBackground(Color.DARK_GRAY);
-
-        // welcomepanel.add(welcomepanel2);
-        // welcomepanel.setLayout(null);
-
 
         c.add(welcomepanel2);
         // welcome panel ends
 
         //pin panel
-        // imgpin.setIcon(new ImageIcon("download.jpeg"));
-
-        // pinpanel.add(imgpin);
-        enterpin.setBounds(310, 200, 300, 250); // enterpin is a jlabel
-        enterpin.setFont(new Font("Verdana", Font.BOLD, 20));
-        enterpin.setForeground(Color.ORANGE);
-        imgpin.setBounds(0,0,850,700);
-        pinpanel2.add(enterpin);
-        pinpanel2.setBackground(Color.DARK_GRAY);
-        pinpanel.add(pinpanel2);
-        c.add(pinpanel);
+        // enterpinlabel.setBounds(310, 0, 300, 250); // enterpin is a jlabel
+        enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
+        enterpinlabel.setForeground(Color.ORANGE); //setting its color to orange
+        pinpanel2.add(enterpinlabel); //adding label enter pin to the panel
+        pinpanel2.setBackground(Color.DARK_GRAY);   //setting the background of the panel
+        c.add(pinpanel2);   //adding pinpanel to the cardlayout
+        pinpanel2.add(enterpin); //enter pin is a text field
+        // enterpin.setBounds(310, 20, 300, 250);
+        pinpanel2.setLayout(new GridLayout(3,1));
 
         // pin panel ends
         
