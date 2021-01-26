@@ -21,11 +21,17 @@ import java.awt.Container;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 
+import atmgui.numberpanel;
+
 //End of imports
 //start of program
 
 class atmgui extends JFrame implements ActionListener {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     String custno = new String();
     String name = new String();
 
@@ -57,6 +63,7 @@ class atmgui extends JFrame implements ActionListener {
     JPanel atm = new JPanel();
 
     JButton submit = new JButton("Submit"); //submit on welcome page
+    JButton numbpan[];
 
     Container c;
 
@@ -143,6 +150,9 @@ class atmgui extends JFrame implements ActionListener {
         c.add(pinpanel2);   //adding pinpanel to the cardlayout
         pinpanel2.add(enterpin); //enter pin is a text field
         // enterpin.setBounds(310, 20, 300, 250);
+        numberpanel np = new numberpanel();
+        numbpan = np.createButtons(10);
+        np.addNumberPanel(pinpanel2);
         pinpanel2.setLayout(new GridLayout(3,1));
 
         // pin panel ends
