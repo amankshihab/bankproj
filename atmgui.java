@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.Timer;
 import java.awt.Container;
-import java.awt.CardLayout;
 
 import atmgui.numberpanel;
 
@@ -32,6 +31,8 @@ class atmgui extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
     String custno = new String();
     String name = new String();
+
+    int pinentered = 0;
 
     int i = 0;
 
@@ -96,7 +97,8 @@ class atmgui extends JFrame implements ActionListener {
 
     atmgui(){
 
-        // Welcome Panel
+//////////////////////////////////// Welcome Panel///////////////////////////////////////
+        
         c = getContentPane();
         c.setLayout(card);
         
@@ -136,9 +138,9 @@ class atmgui extends JFrame implements ActionListener {
         welcomepanel2.setBackground(Color.DARK_GRAY);
 
         c.add(welcomepanel2);
-        // welcome panel ends
+//////////////////////////////// welcome panel ends ///////////////////////////////////////
 
-        //pin panel
+/////////////////////////////////////pin panel/////////////////////////////////////////////////////////////
         
         // enterpinlabel is a jlabel
         pinpanel2.setLayout(null);
@@ -153,8 +155,10 @@ class atmgui extends JFrame implements ActionListener {
         numberpanel np = new numberpanel(pinpanel2, enterpin);
         numbpan = np.createButtons(10);
         np.addNumberPanel();
+        pinentered = np.get_pin();
+        System.out.println(pin);
 
-        // pin panel ends
+//////////////////////////////////////pin panel ends///////////////////////////////////////
         
         
         frame.setLayout(new CardLayout()); 
@@ -187,7 +191,6 @@ class atmgui extends JFrame implements ActionListener {
 
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
             Statement st = conn.createStatement();
-            // System.out.println(query);
             ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
 
             while(rs.next()){

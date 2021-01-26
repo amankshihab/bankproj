@@ -15,6 +15,7 @@ public class numberpanel implements ActionListener{
     JTextField jtf;
     JPanel jp;
 
+    int pin = 0;
 
     public numberpanel(JPanel jp, JTextField jtf){
 
@@ -61,10 +62,19 @@ public class numberpanel implements ActionListener{
 
         for(int i = 0; i < 10; i++){
 
-            if(e.getSource() == buttons[i] && jtf.getText().length()<4){
+            if(e.getSource() == buttons[i] && jtf.getText().length() < 4){
 
                 jtf.setText(jtf.getText()+ "*");
             }
+
+            if(jtf.getText().length() == 4){
+                pin = pin * 10 + i;
+            }
         }
+    }
+
+    public int get_pin(){
+
+        return pin;
     }
 }
