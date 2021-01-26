@@ -2,15 +2,27 @@ package atmgui;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class numberpanel implements ActionListener{
 
     
-    JButton buttons[];
+    JButton buttons[] = new JButton[50];
+
+    JTextField jtf;
+    JPanel jp;
+
+
+    public numberpanel(JPanel jp, JTextField jtf){
+
+        this.jtf = jtf;
+        this.jp = jp;
+    }
     
-    public void addNumberPanel(JPanel jp) {
+    public void addNumberPanel() {
 
         JButton pinnumbers[] = createButtons(10);
 
@@ -24,12 +36,12 @@ public class numberpanel implements ActionListener{
 
     public JButton[] createButtons(int n) {
 
-        JButton buttons[] = new JButton[n];
+        // buttons[] = new JButton[n];
 
         for (int i = 0; i < n; i++) {
 
             buttons[i] = new JButton(String.valueOf(i));
-            buttons[i].addActionListener(null);
+            buttons[i].addActionListener(this);
         }
 
         return buttons;
@@ -41,7 +53,7 @@ public class numberpanel implements ActionListener{
 
             if(e.getSource() == buttons[i]){
 
-                System.out.println(i);
+                jtf.setText(String.valueOf(i));
             }
         }
     }

@@ -3,7 +3,6 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -19,7 +18,6 @@ import java.sql.Statement;
 import javax.swing.Timer;
 import java.awt.Container;
 import java.awt.CardLayout;
-import java.awt.GridLayout;
 
 import atmgui.numberpanel;
 
@@ -75,7 +73,6 @@ class atmgui extends JFrame implements ActionListener {
 
     Timer timer = new Timer(500, new ActionListener(){  // changes the color of welcome text
 
-        @Override
         public void actionPerformed(ActionEvent e){
             int i = getRandomNumber(0, 6);
             welcome.setForeground(color[i]);
@@ -142,24 +139,22 @@ class atmgui extends JFrame implements ActionListener {
         // welcome panel ends
 
         //pin panel
-        // enterpinlabel.setBounds(310, 0, 300, 250); // enterpin is a jlabel
+        
+        // enterpinlabel is a jlabel
         enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
         enterpinlabel.setForeground(Color.ORANGE); //setting its color to orange
         pinpanel2.add(enterpinlabel); //adding label enter pin to the panel
         pinpanel2.setBackground(Color.DARK_GRAY);   //setting the background of the panel
         c.add(pinpanel2);   //adding pinpanel to the cardlayout
         pinpanel2.add(enterpin); //enter pin is a text field
-        // enterpin.setBounds(310, 20, 300, 250);
-        numberpanel np = new numberpanel();
+        numberpanel np = new numberpanel(pinpanel2, enterpin);
         numbpan = np.createButtons(10);
-        np.addNumberPanel(pinpanel2);
-        pinpanel2.setLayout(new GridLayout(3,1));
+        np.addNumberPanel();
 
         // pin panel ends
         
         
         frame.setLayout(new CardLayout()); 
-        // frame.add(welcomepanel);
         frame.add(c);  
         c.setVisible(true);
         frame.setVisible(true);
@@ -185,8 +180,6 @@ class atmgui extends JFrame implements ActionListener {
             System.exit(1);
         }
 
-        // String query = "SELECT * FROM atminfo where custno=\'" + acno.getText() + "\'";
-
         try{
 
             Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", "amankshihab");
@@ -209,15 +202,12 @@ class atmgui extends JFrame implements ActionListener {
                     card.next(c);
                 }
                 catch(Exception except){
-                    // acc_doesnt_exist.setVisible(true);
                     changevisible();
                 }
             }
         }
         catch(Exception except){
-            // System.out.println("Could not connect to database!");
             changevisible();
-            // System.exit(1);
         }
     }
 
