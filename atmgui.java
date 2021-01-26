@@ -141,8 +141,11 @@ class atmgui extends JFrame implements ActionListener {
         //pin panel
         
         // enterpinlabel is a jlabel
+        pinpanel2.setLayout(null);
         enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
         enterpinlabel.setForeground(Color.ORANGE); //setting its color to orange
+        enterpinlabel.setBounds(200,200,200,40);
+        enterpin.setBounds(280,250,120,40);
         pinpanel2.add(enterpinlabel); //adding label enter pin to the panel
         pinpanel2.setBackground(Color.DARK_GRAY);   //setting the background of the panel
         c.add(pinpanel2);   //adding pinpanel to the cardlayout
@@ -182,7 +185,7 @@ class atmgui extends JFrame implements ActionListener {
 
         try{
 
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", "amankshihab");
+            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
             Statement st = conn.createStatement();
             // System.out.println(query);
             ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");

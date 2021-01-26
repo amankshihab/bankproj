@@ -25,8 +25,18 @@ public class numberpanel implements ActionListener{
     public void addNumberPanel() {
 
         JButton pinnumbers[] = createButtons(10);
-
-        // pinnumbers[0].setBounds(x, y, width, height);
+        
+        
+        //positioning pinnumbers[]
+        int r=0;
+        for(int i=0;i<7;i+=3)
+        {
+            for(int j=1;j<=3;j++)
+            {
+                pinnumbers[i+j].setBounds(250+((j-1)*60),300+(r*40),60,40);
+            }
+            r++;
+        }
 
         for (int i = 0; i < 10; i++) {
 
@@ -51,9 +61,9 @@ public class numberpanel implements ActionListener{
 
         for(int i = 0; i < 10; i++){
 
-            if(e.getSource() == buttons[i]){
+            if(e.getSource() == buttons[i] && jtf.getText().length()<4){
 
-                jtf.setText(String.valueOf(i));
+                jtf.setText(jtf.getText()+ "*");
             }
         }
     }
