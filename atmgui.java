@@ -19,6 +19,7 @@ import javax.swing.Timer;
 import java.awt.Container;
 
 import atmgui.numberpanel;
+import atmgui.transanctionpages;
 
 //End of imports
 //start of program
@@ -60,6 +61,7 @@ class atmgui extends JFrame implements ActionListener {
     JPanel pinpanel = new JPanel(); 
     JPanel pinpanel2 = new JPanel(); // second panel or page to enter pin
     JPanel atm = new JPanel();
+    JPanel transpanel = new JPanel();
 
     JButton submit = new JButton("Submit"); //submit on welcome page
     JButton numbpan[];
@@ -152,7 +154,7 @@ class atmgui extends JFrame implements ActionListener {
         pinpanel2.setBackground(Color.DARK_GRAY);   //setting the background of the panel
         c.add(pinpanel2);   //adding pinpanel to the cardlayout
         pinpanel2.add(enterpin); //enter pin is a text field
-        numberpanel np = new numberpanel(pinpanel2, enterpin);
+        numberpanel np = new numberpanel(pinpanel2, enterpin, c, card);
         numbpan = np.createButtons(10);
         np.addNumberPanel();
         pinentered = np.get_pin();
@@ -160,7 +162,16 @@ class atmgui extends JFrame implements ActionListener {
 
 //////////////////////////////////////pin panel ends///////////////////////////////////////
         
-        
+//////////////////////////////////////Transanction Pages///////////////////////////////////
+
+        transanctionpages trp = new transanctionpages();
+
+        trp.transanctionpanel(transpanel);
+
+        c.add(transpanel);
+
+//////////////////////////////////////Transanction page ends//////////////////////////////////////
+
         frame.setLayout(new CardLayout()); 
         frame.add(c);  
         c.setVisible(true);

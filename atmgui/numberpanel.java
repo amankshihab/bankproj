@@ -4,23 +4,32 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import java.awt.Container;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.CardLayout;
 
 public class numberpanel implements ActionListener{
 
     
     JButton buttons[] = new JButton[50];
+    JButton continues = new JButton("Continue");
 
     JTextField jtf;
     JPanel jp;
 
     int pin = 0;
 
-    public numberpanel(JPanel jp, JTextField jtf){
+    Container c;
+
+    CardLayout card = new CardLayout();
+
+    public numberpanel(JPanel jp, JTextField jtf, Container c, CardLayout card){
 
         this.jtf = jtf;
         this.jp = jp;
+        this.c = c;
+        this.card = card;
     }
     
     public void addNumberPanel() {
@@ -43,6 +52,10 @@ public class numberpanel implements ActionListener{
 
             jp.add(pinnumbers[i]);
         }
+
+        continues.setBounds(370, 580, 60, 40);
+        jp.add(continues);
+        continues.addActionListener(this);
     }
 
     public JButton[] createButtons(int n) {
@@ -70,6 +83,11 @@ public class numberpanel implements ActionListener{
             if(jtf.getText().length() == 4){
                 pin = pin * 10 + i;
             }
+        }
+
+        if(e.getSource() == continues){
+
+            card.next(c);
         }
     }
 
