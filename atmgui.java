@@ -1,4 +1,3 @@
-
 //Importing Required Packages
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -6,35 +5,37 @@ import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.Timer;
+
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Container;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import javax.swing.Timer;
-import java.awt.Container;
-import java.awt.BorderLayout;
-import javax.swing.JPasswordField;
 
 import atmgui.numberpanel;
-import atmgui.transanctionpages;
 
 //End of imports
 //start of program
 
 class atmgui extends JFrame implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
     String custno = new String();
     String name = new String();
+
+    Connection conn;
 
     int pinentered = 0;
 
     int i = 0;
+    int attempts = 4;
 
     int pin = 0;
     Double balance = 0.0; // to retreive data from the db
@@ -51,9 +52,16 @@ class atmgui extends JFrame implements ActionListener {
     JLabel img = new JLabel();
     JLabel imgpin = new JLabel();
     JLabel enterpinlabel = new JLabel("~~ Enter Pin: ~~");
+    JLabel withlabel = new JLabel("~~ Enter the amount: ~~");
+    JLabel thankyou = new JLabel("~~ Thank You! ~~");
+    JLabel incorrect_pin = new JLabel("Incorrect pin!");
+    JLabel hello = new JLabel("Hello");
+    JLabel insuff_bal = new JLabel("Insufficient Balance!");
+    JLabel remaininglabel = new JLabel("Remaining Balance:");
 
     JTextField acno = new JTextField(15);   //to enter account number in welcome page
-    JTextField enterpin = new JPasswordField(4); //to enter pin number in pin page
+    JTextField enterpin = new JTextField(15); //to enter pin number in pin page
+    JTextField withamt = new JTextField(15);
 
     JPanel welcomepanel = new JPanel();
     JPanel welcomepanel2 = new JPanel();//first panel or welcome page
@@ -61,10 +69,14 @@ class atmgui extends JFrame implements ActionListener {
     JPanel pinpanel2 = new JPanel(); // second panel or page to enter pin
     JPanel atm = new JPanel();
     JPanel withpanel = new JPanel();
+    JPanel thankyoupanel = new JPanel();
 
     JButton submit = new JButton("Submit"); //submit on welcome page
     JButton numbpan[];
     JButton continues = new JButton("Continue");
+    JButton wihtdraw = new JButton("Withdraw");
+    JButton clear = new JButton("CLEAR");
+    JButton zero = new JButton("0");
 
     Container c;
 
@@ -92,6 +104,23 @@ class atmgui extends JFrame implements ActionListener {
             }
             else{
                 acc_no.setVisible(false);
+                i = 0;
+            }
+        }
+    });
+
+    Timer thanktime = new Timer(500, new ActionListener(){
+
+        int i = 0;
+        
+        public void actionPerformed(ActionEvent e){
+
+            if(i == 0){
+                thankyou.setVisible(true);
+                i = 1;
+            }
+            else{
+                thankyou.setVisible(false);
                 i = 0;
             }
         }
@@ -146,11 +175,19 @@ class atmgui extends JFrame implements ActionListener {
         
         // enterpinlabel is a jlabel
         pinpanel2.setLayout(null);
-        enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
-        enterpinlabel.setForeground(Color.ORANGE); //setting its color to orange
-        enterpinlabel.setBounds(200,200,200,40);
         
-        enterpin.setBounds(280,250,120,40);
+        hello.setForeground(Color.ORANGE);
+        pinpanel2.add(hello);
+        hello.setFont(new Font("Verdana", Font.BOLD, 30));
+        hello.setBounds(280, 100, 450, 50);
+        
+        enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
+        enterpinlabel.setForeground(Color.GREEN); //setting its color to orange
+        enterpinlabel.setBounds(320,200,200,40);
+        
+        enterpin.setBounds(355,250,120,40);
+        enterpin.setText("");
+        enterpin.setEditable(false);
         pinpanel2.add(enterpinlabel); //adding label enter pin to the panel
         pinpanel2.setBackground(Color.DARK_GRAY);   //setting the background of the panel
         c.add(pinpanel2);   //adding pinpanel to the cardlayout
@@ -166,7 +203,7 @@ class atmgui extends JFrame implements ActionListener {
         {
             for(int j=1;j<=3;j++)
             {
-                numbpan[i+j].setBounds(250+((j-1)*60),300+(r*40),60,40);
+                numbpan[i+j].setBounds(325+((j-1)*60),300+(r*40),60,40);
             }
             r++;
         }
@@ -175,19 +212,72 @@ class atmgui extends JFrame implements ActionListener {
     
             pinpanel2.add(numbpan[i]);
         }
+        pinpanel2.add(zero);
+        zero.addActionListener(this);
+        zero.setBounds(385, 420, 60, 40);
+
+        incorrect_pin.setBounds(350, 550, 180, 25);
+        incorrect_pin.setVisible(false);
+        incorrect_pin.setFont(new Font("Verdana", Font.BOLD, 20));
+        incorrect_pin.setForeground(Color.RED);
+        pinpanel2.add(incorrect_pin);
 
         pinpanel2.add(continues);
-        continues.setBounds(370, 580, 60, 40);
+        continues.setBounds(325, 480, 100, 40);
         continues.addActionListener(this);
+
+        pinpanel2.add(clear);
+        clear.addActionListener(this);
+        clear.setBounds(440, 480, 80, 40);
+        clear.setBackground(Color.RED);
+        clear.setForeground(Color.BLACK);
 
 //////////////////////////////////////pin panel ends///////////////////////////////////////
         
 //////////////////////////////////////Withdraw Pages///////////////////////////////////
 
-    // numberpanel np1 = new numberpanel(withpanel, enterpin, c, card, pin);
+        c.add(withpanel);
+        withpanel.setBackground(Color.DARK_GRAY);
+        withpanel.setLayout(null);
+        
+        withpanel.add(withlabel);
+        withlabel.setForeground(Color.CYAN);
+        withlabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        withlabel.setBounds(280,200,450,50);
+
+        withpanel.add(withamt);
+        withamt.setBounds(350,300,140,30);
+
+        withpanel.add(wihtdraw);
+        wihtdraw.addActionListener(this);
+        wihtdraw.setBounds(370, 380, 100, 35);
+
+        withpanel.add(insuff_bal);
+        insuff_bal.setBounds(320, 430, 250, 45);
+        insuff_bal.setFont(new Font("Verdana", Font.BOLD, 20));
+        insuff_bal.setForeground(Color.RED);
+        insuff_bal.setVisible(false);
 
 //////////////////////////////////////Withdraw page ends//////////////////////////////////////
 
+//////////////////////////////////////Thank you page//////////////////////////////////////////
+
+        thankyoupanel.add(thankyou);
+        thankyoupanel.setBackground(Color.DARK_GRAY);
+        thankyou.setForeground(Color.YELLOW);
+
+        thankyou.setBounds(280, 25, 550, 100);    // welcome is a jlabel
+        thankyou.setFont(new Font("Arial", Font.BOLD, 30));
+
+        thankyoupanel.add(remaininglabel);
+        thankyoupanel.setLayout(null);
+        remaininglabel.setBounds(280, 250, 400, 100);
+        remaininglabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        remaininglabel.setForeground(Color.MAGENTA);
+
+        c.add(thankyoupanel);
+
+//////////////////////////////////Thank you page ends/////////////////////////////////////////
         frame.setLayout(new CardLayout()); 
         frame.add(c);  
         c.setVisible(true);
@@ -197,15 +287,19 @@ class atmgui extends JFrame implements ActionListener {
         frame.setSize(850,700); 
         timer.start(); 
         time.start();
+        thanktime.start();
     }
 
     public void actionPerformed(ActionEvent e){
         
         for(int i = 0; i < 10; i++){
 
-            if(e.getSource() == numbpan[i]){
+            if(e.getSource() == numbpan[i] && enterpin.getText().length() < 4){
 
-                enterpin.setText(enterpin.getText()+ "*");
+                try{
+                    enterpin.setText(enterpin.getText()+ "*");
+                }
+                catch(Exception ed){}
                 pinentered = pinentered * 10 + i;
             }
         }
@@ -221,23 +315,28 @@ class atmgui extends JFrame implements ActionListener {
 
             try{
 
-                Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
-
+                
                 while(rs.next()){
 
                     try{
-                        custno = rs.getString("custno");
-                        name = rs.getString("custname");
-                        pin = rs.getInt("pin");
-                        balance = rs.getDouble("balance");
-                        System.out.println(custno);
-                        System.out.println(name);
-                        System.out.println(pin);
-                        System.out.println(balance);
+                        
+                        if(custno == null){
+                            System.out.println("hi");
+                        acc_doesnt_exist.setVisible(true);
+                        }
+                        else{
 
-                        card.next(c);
+                            custno = rs.getString("custno");
+                            name = rs.getString("custname");
+                            pin = rs.getInt("pin");
+                            balance = rs.getDouble("balance");
+                            hello.setText(hello.getText() + " " + name + "!");
+
+                            card.next(c);
+                        }
                     }
                     catch(Exception except){
                         System.out.println("hi");
@@ -246,12 +345,64 @@ class atmgui extends JFrame implements ActionListener {
                 }
             }
             catch(Exception except){
+                System.out.println("hi");
                 acc_doesnt_exist.setVisible(true);
             }
         }
 
         if(e.getSource() == continues){
-            System.out.println("Contined");
+            if(pinentered == pin)
+            card.next(c);
+            else{
+                enterpin.setText("Incorrect, hit CLEAR");
+                incorrect_pin.setVisible(true);
+                enterpin.setForeground(Color.RED);
+                attempts += 1;
+
+                if(attempts == 4)
+                System.exit(1);
+            }
+        }
+
+        if(e.getSource() == wihtdraw){
+
+            if(Double.parseDouble(withamt.getText()) <= balance && Double.parseDouble(withamt.getText()) > 0){
+
+                double remaining = balance - Double.parseDouble(withamt.getText());
+                
+                try{
+                    Statement withdrStatement = conn.createStatement();
+
+                    String query = "UPDATE atminfo SET balance=" + remaining + " WHERE custno='" + custno + "';";
+                    
+                    withdrStatement.executeUpdate(query);
+
+                    remaininglabel.setText(remaininglabel.getText() + " " + String.valueOf(remaining));
+                    
+                    card.next(c);
+                }
+                catch(Exception ed){
+
+                }
+            }
+            else{
+
+                insuff_bal.setVisible(true);
+            }
+        }
+
+        if(e.getSource() == clear){
+
+            pinentered = 0;
+            enterpin.setText("");
+            enterpin.setForeground(Color.BLACK);
+            incorrect_pin.setVisible(false);
+        }
+
+        if(e.getSource() == zero){
+
+            enterpin.setText(enterpin.getText() + "*");
+            pinentered *= 10;
         }
     }
 
