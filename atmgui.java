@@ -75,6 +75,7 @@ class atmgui extends JFrame implements ActionListener {
     JButton numbpan[];
     JButton continues = new JButton("Continue");
     JButton wihtdraw = new JButton("Withdraw");
+    JButton deposit = new JButton("Deposit");
     JButton clear = new JButton("CLEAR");
     JButton zero = new JButton("0");
 
@@ -252,6 +253,10 @@ class atmgui extends JFrame implements ActionListener {
         wihtdraw.addActionListener(this);
         wihtdraw.setBounds(370, 380, 100, 35);
 
+        withpanel.add(deposit);
+        deposit.addActionListener(this);
+        deposit.setBounds(370, 420, 100, 35);
+
         withpanel.add(insuff_bal);
         insuff_bal.setBounds(320, 430, 250, 45);
         insuff_bal.setFont(new Font("Verdana", Font.BOLD, 20));
@@ -403,6 +408,32 @@ class atmgui extends JFrame implements ActionListener {
 
             enterpin.setText(enterpin.getText() + "*");
             pinentered *= 10;
+        }
+
+        if(e.getSource() == deposit){
+
+            if(Double.parseDouble(withamt.getText()) <= 100000 && Double.parseDouble(withamt.getText()) > 0){
+
+                double updated = balance + Double.parseDouble(withamt.getText());
+                
+                try{
+                    Statement withdrStatement = conn.createStatement();
+
+                    String query = "UPDATE atminfo SET balance=" + updated + " WHERE custno='" + custno + "';";
+                    
+                    withdrStatement.executeUpdate(query);
+
+                    remaininglabel.setText(remaininglabel.getText() + " " + String.valueOf(updated));
+                    
+                    card.next(c);
+                }
+                catch(Exception ed){
+
+                }
+            }
+            else{
+
+            }
         }
     }
 
