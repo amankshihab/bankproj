@@ -35,7 +35,7 @@ class atmgui extends JFrame implements ActionListener {
     int pinentered = 0;
 
     int i = 0;
-    int attempts = 4;
+    int attempts = 0;
 
     int pin = 0;
     Double balance = 0.0; // to retreive data from the db
@@ -258,7 +258,7 @@ class atmgui extends JFrame implements ActionListener {
         deposit.setBounds(370, 420, 100, 35);
 
         withpanel.add(insuff_bal);
-        insuff_bal.setBounds(320, 430, 250, 45);
+        insuff_bal.setBounds(320, 460, 250, 45);
         insuff_bal.setFont(new Font("Verdana", Font.BOLD, 20));
         insuff_bal.setForeground(Color.RED);
         insuff_bal.setVisible(false);
@@ -348,6 +348,11 @@ class atmgui extends JFrame implements ActionListener {
                         acc_doesnt_exist.setVisible(true);
                     }
                 }
+
+                if(rs.next() == false){
+                    welcomepanel2.add(acc_doesnt_exist);
+                    acc_doesnt_exist.setVisible(true);
+                }
             }
             catch(Exception except){
                 System.out.println("hi");
@@ -363,15 +368,16 @@ class atmgui extends JFrame implements ActionListener {
                 incorrect_pin.setVisible(true);
                 enterpin.setForeground(Color.RED);
                 attempts += 1;
+                System.out.println(attempts);
 
                 if(attempts == 4)
-                System.exit(1);
+                    System.exit(1);
             }
         }
 
         if(e.getSource() == wihtdraw){
 
-            if(Double.parseDouble(withamt.getText()) <= balance && Double.parseDouble(withamt.getText()) > 0){
+            if(Double.parseDouble(withamt.getText()) <= balance && Double.parseDouble(withamt.getText()) > 100 && Double.parseDouble(withamt.getText()) % 100 == 0){
 
                 double remaining = balance - Double.parseDouble(withamt.getText());
                 
@@ -390,6 +396,10 @@ class atmgui extends JFrame implements ActionListener {
 
                 }
             }
+            else if(Double.parseDouble(withamt.getText()) % 100 != 0){
+
+                withamt.setText("Has to be multiple of 100");
+            }
             else{
 
                 insuff_bal.setVisible(true);
@@ -406,8 +416,10 @@ class atmgui extends JFrame implements ActionListener {
 
         if(e.getSource() == zero){
 
-            enterpin.setText(enterpin.getText() + "*");
-            pinentered *= 10;
+            if(enterpin.getText().length() < 4){
+                enterpin.setText(enterpin.getText() + "*");
+                pinentered *= 10;
+            }
         }
 
         if(e.getSource() == deposit){
