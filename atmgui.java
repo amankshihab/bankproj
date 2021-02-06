@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.Timer;
 import java.awt.Container;
+import java.awt.BorderLayout;
+import javax.swing.JPasswordField;
 
 import atmgui.numberpanel;
 import atmgui.transanctionpages;
@@ -26,9 +28,6 @@ import atmgui.transanctionpages;
 
 class atmgui extends JFrame implements ActionListener {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
     String custno = new String();
     String name = new String();
@@ -54,17 +53,18 @@ class atmgui extends JFrame implements ActionListener {
     JLabel enterpinlabel = new JLabel("~~ Enter Pin: ~~");
 
     JTextField acno = new JTextField(15);   //to enter account number in welcome page
-    JTextField enterpin = new JTextField(15); //to enter pin number in pin page
+    JTextField enterpin = new JPasswordField(4); //to enter pin number in pin page
 
     JPanel welcomepanel = new JPanel();
     JPanel welcomepanel2 = new JPanel();//first panel or welcome page
     JPanel pinpanel = new JPanel(); 
     JPanel pinpanel2 = new JPanel(); // second panel or page to enter pin
     JPanel atm = new JPanel();
-    JPanel transpanel = new JPanel();
+    JPanel withpanel = new JPanel();
 
     JButton submit = new JButton("Submit"); //submit on welcome page
     JButton numbpan[];
+    JButton continues = new JButton("Continue");
 
     Container c;
 
@@ -104,7 +104,7 @@ class atmgui extends JFrame implements ActionListener {
         c = getContentPane();
         c.setLayout(card);
         
-        welcome.setBounds(95, 10, 650, 100);    // welcome is a jlabel
+        welcome.setBounds(150, 10, 650, 100);    // welcome is a jlabel
         welcome.setFont(new Font("Arial", Font.BOLD, 30));
         welcomepanel2.add(welcome); 
 
@@ -127,7 +127,7 @@ class atmgui extends JFrame implements ActionListener {
         submit.setBackground(Color.GREEN);
         welcomepanel2.add(submit);
 
-        acc_doesnt_exist.setBounds(350, 420, 150, 25);
+        acc_doesnt_exist.setBounds(330, 420, 230, 25);
         acc_doesnt_exist.setFont(new Font("Verdana", Font.ITALIC, 18));
         acc_doesnt_exist.setForeground(Color.RED);
         acc_doesnt_exist.setVisible(false);
@@ -149,28 +149,44 @@ class atmgui extends JFrame implements ActionListener {
         enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
         enterpinlabel.setForeground(Color.ORANGE); //setting its color to orange
         enterpinlabel.setBounds(200,200,200,40);
+        
         enterpin.setBounds(280,250,120,40);
         pinpanel2.add(enterpinlabel); //adding label enter pin to the panel
         pinpanel2.setBackground(Color.DARK_GRAY);   //setting the background of the panel
         c.add(pinpanel2);   //adding pinpanel to the cardlayout
         pinpanel2.add(enterpin); //enter pin is a text field
-        numberpanel np = new numberpanel(pinpanel2, enterpin, c, card);
+        
+        numberpanel np = new numberpanel();
         numbpan = np.createButtons(10);
-        np.addNumberPanel();
-        pinentered = np.get_pin();
-        System.out.println(pin);
+        for(int i = 0; i < 10; i++)
+            numbpan[i].addActionListener(this);
+
+        int r = 0;
+        for(int i=0;i<7;i+=3)
+        {
+            for(int j=1;j<=3;j++)
+            {
+                numbpan[i+j].setBounds(250+((j-1)*60),300+(r*40),60,40);
+            }
+            r++;
+        }
+    
+        for (int i = 0; i < 10; i++) {
+    
+            pinpanel2.add(numbpan[i]);
+        }
+
+        pinpanel2.add(continues);
+        continues.setBounds(370, 580, 60, 40);
+        continues.addActionListener(this);
 
 //////////////////////////////////////pin panel ends///////////////////////////////////////
         
-//////////////////////////////////////Transanction Pages///////////////////////////////////
+//////////////////////////////////////Withdraw Pages///////////////////////////////////
 
-        transanctionpages trp = new transanctionpages();
+    // numberpanel np1 = new numberpanel(withpanel, enterpin, c, card, pin);
 
-        trp.transanctionpanel(transpanel);
-
-        c.add(transpanel);
-
-//////////////////////////////////////Transanction page ends//////////////////////////////////////
+//////////////////////////////////////Withdraw page ends//////////////////////////////////////
 
         frame.setLayout(new CardLayout()); 
         frame.add(c);  
@@ -183,48 +199,59 @@ class atmgui extends JFrame implements ActionListener {
         time.start();
     }
 
-    public void changevisible(){
-
-        acc_doesnt_exist.setVisible(true);
-    }
-
     public void actionPerformed(ActionEvent e){
         
-        try{
-            Class.forName("org.postgresql.Driver");
-        }
-        catch(Exception except){
-            System.out.println("No driver detected!");
-            System.exit(1);
-        }
+        for(int i = 0; i < 10; i++){
 
-        try{
+            if(e.getSource() == numbpan[i]){
 
-            Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
-
-            while(rs.next()){
-
-                try{
-                    custno = rs.getString("custno");
-                    name = rs.getString("custname");
-                    pin = rs.getInt("pin");
-                    balance = rs.getDouble("balance");
-                    System.out.println(custno);
-                    System.out.println(name);
-                    System.out.println(pin);
-                    System.out.println(balance);
-
-                    card.next(c);
-                }
-                catch(Exception except){
-                    changevisible();
-                }
+                enterpin.setText(enterpin.getText()+ "*");
+                pinentered = pinentered * 10 + i;
             }
         }
-        catch(Exception except){
-            changevisible();
+        
+        if(e.getSource() == submit){
+            try{
+                Class.forName("org.postgresql.Driver");
+            }
+            catch(Exception except){
+                System.out.println("No driver detected!");
+                System.exit(1);
+            }
+
+            try{
+
+                Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
+
+                while(rs.next()){
+
+                    try{
+                        custno = rs.getString("custno");
+                        name = rs.getString("custname");
+                        pin = rs.getInt("pin");
+                        balance = rs.getDouble("balance");
+                        System.out.println(custno);
+                        System.out.println(name);
+                        System.out.println(pin);
+                        System.out.println(balance);
+
+                        card.next(c);
+                    }
+                    catch(Exception except){
+                        System.out.println("hi");
+                        acc_doesnt_exist.setVisible(true);
+                    }
+                }
+            }
+            catch(Exception except){
+                acc_doesnt_exist.setVisible(true);
+            }
+        }
+
+        if(e.getSource() == continues){
+            System.out.println("Contined");
         }
     }
 

@@ -3,6 +3,7 @@ package atmgui;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 import java.awt.Container;
 import java.awt.event.ActionListener;
@@ -16,28 +17,22 @@ public class numberpanel implements ActionListener{
     JButton continues = new JButton("Continue");
 
     JTextField jtf;
+    
     JPanel jp;
 
+    JLabel incorrect_pin = new JLabel("Incorrect Pin!");
+
     int pin = 0;
+    int pincorrect = 0;
 
     Container c;
 
     CardLayout card = new CardLayout();
-
-    public numberpanel(JPanel jp, JTextField jtf, Container c, CardLayout card){
-
-        this.jtf = jtf;
-        this.jp = jp;
-        this.c = c;
-        this.card = card;
-    }
     
     public void addNumberPanel() {
 
         JButton pinnumbers[] = createButtons(10);
         
-        
-        //positioning pinnumbers[]
         int r=0;
         for(int i=0;i<7;i+=3)
         {
@@ -56,6 +51,10 @@ public class numberpanel implements ActionListener{
         continues.setBounds(370, 580, 60, 40);
         jp.add(continues);
         continues.addActionListener(this);
+
+        jp.add(incorrect_pin);
+        incorrect_pin.setVisible(false);
+        incorrect_pin.setBounds(350, 480, 60, 60);
     }
 
     public JButton[] createButtons(int n) {
@@ -75,19 +74,22 @@ public class numberpanel implements ActionListener{
 
         for(int i = 0; i < 10; i++){
 
-            if(e.getSource() == buttons[i] && jtf.getText().length() < 4){
+            if(e.getSource() == buttons[i]){
 
                 jtf.setText(jtf.getText()+ "*");
-            }
-
-            if(jtf.getText().length() == 4){
                 pin = pin * 10 + i;
             }
         }
 
         if(e.getSource() == continues){
 
-            card.next(c);
+            if(pincorrect == pin)
+                card.next(c);
+            else{
+                incorrect_pin.setVisible(true);
+                System.out.println(pincorrect);
+                System.out.println(pin);
+            }
         }
     }
 
