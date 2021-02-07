@@ -2,7 +2,6 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.Timer;
@@ -25,6 +24,7 @@ import atmgui.numberpanel;
 //End of imports
 //start of program
 
+@SuppressWarnings("serial")
 class atmgui extends JFrame implements ActionListener {
 
     String custno = new String();
@@ -58,6 +58,7 @@ class atmgui extends JFrame implements ActionListener {
     JLabel hello = new JLabel("Hello");
     JLabel insuff_bal = new JLabel("Insufficient Balance!");
     JLabel remaininglabel = new JLabel("Remaining Balance:");
+    JLabel balanceLabel = new JLabel("Balance:");
 
     JTextField acno = new JTextField(15);   //to enter account number in welcome page
     JTextField enterpin = new JTextField(15); //to enter pin number in pin page
@@ -164,8 +165,6 @@ class atmgui extends JFrame implements ActionListener {
         welcomepanel2.add(acc_doesnt_exist);
         
         welcomepanel2.setLayout(null);
-        img.setIcon(new ImageIcon("download.jpeg"));
-        img.setBounds(0,0,850,700);
         welcomepanel2.setBounds(-10, 0, 850, 700);
         welcomepanel2.setBackground(Color.DARK_GRAY);
 
@@ -245,6 +244,11 @@ class atmgui extends JFrame implements ActionListener {
         withlabel.setForeground(Color.CYAN);
         withlabel.setFont(new Font("Verdana", Font.BOLD, 20));
         withlabel.setBounds(280,200,450,50);
+
+        withpanel.add(balanceLabel);
+        balanceLabel.setBounds(318, 235, 450, 50);
+        balanceLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        balanceLabel.setForeground(Color.GREEN);
 
         withpanel.add(withamt);
         withamt.setBounds(350,300,140,30);
@@ -329,7 +333,6 @@ class atmgui extends JFrame implements ActionListener {
                     try{
                         
                         if(custno == null){
-                            System.out.println("hi");
                         acc_doesnt_exist.setVisible(true);
                         }
                         else{
@@ -340,11 +343,12 @@ class atmgui extends JFrame implements ActionListener {
                             balance = rs.getDouble("balance");
                             hello.setText(hello.getText() + " " + name + "!");
 
+                            balanceLabel.setText(balanceLabel.getText() + " " + balance);
+
                             card.next(c);
                         }
                     }
                     catch(Exception except){
-                        System.out.println("hi");
                         acc_doesnt_exist.setVisible(true);
                     }
                 }
