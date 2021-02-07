@@ -8,7 +8,7 @@ In this project we used java swing to model the GUI, and we connect to the datab
 
 We have a total of 4 pages in this project.
 
-1. First is the welcome page which displays a basic welcome message and gives a textfield to enter the account number, here account number is used in place of inserting a card to identify the customer. Then we have a submit button which verifies the details and takes you to the next page. The flashing colours was done using "Timer", more on that can be found [here]("https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html").
+1. First is the welcome page which displays a basic welcome message and gives a textfield to enter the account number, here account number is used in place of inserting a card to identify the customer. Then we have a submit button which verifies the details and takes you to the next page. The flashing colours was done using "Timer", more on that can be found [here](https://docs.oracle.com/javase/tutorial/uiswing/misc/timer.html)
 
 2. If the account exists, then you'll be taken to the pin page to enter the pin. In the pin panel page, we gave physical number keys to enter the pin to maintain security of the application. There are two buttons continue and clear. Clear clears the input and resets it. Continue verifies the entered pin and takes you to the next page. Do note that there is a 4 attempt limit on entering the pin.
 
