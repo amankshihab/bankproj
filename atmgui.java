@@ -156,6 +156,7 @@ class atmgui extends JFrame implements ActionListener {
         welcomepanel2.add(acno);
         acno.setForeground(Color.BLUE);
         acno.setBackground(Color.LIGHT_GRAY);
+        frame.getRootPane().setDefaultButton(submit);
         
 
         submit.setBounds(350, 390, 150, 25); // submit is a button
@@ -357,7 +358,7 @@ class atmgui extends JFrame implements ActionListener {
 
             try{
 
-                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", "joju9090");
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
                 
@@ -492,6 +493,8 @@ class atmgui extends JFrame implements ActionListener {
             remaininglabel.setText("Remaining Balance: ");
             balanceLabel.setText("Balance: ");
             withamt.setText(null);
+            hello.setText("Hello");
+            pinentered = 0;
 
         }
     }
