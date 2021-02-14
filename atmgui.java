@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import javax.swing.ImageIcon;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -46,10 +47,12 @@ class atmgui extends JFrame implements ActionListener {
     JFrame frame = new JFrame("Tightwad Bank ATM");
 
     public JLabel welcome = new JLabel("~$~ Welcome to Tightwad Bank! ~$~");
+    JLabel slogan =  new JLabel("Where Our Interest Meets Your Needs");
 
     JLabel acc_no = new JLabel("~~ Enter Acc no. ~~");
     JLabel acc_doesnt_exist = new JLabel("Account does not exist!");
     JLabel img = new JLabel();
+    JLabel img1 = new JLabel();
     JLabel imgpin = new JLabel();
     JLabel enterpinlabel = new JLabel("~~ Enter Pin: ~~");
     JLabel withlabel = new JLabel("~~ Enter the amount: ~~");
@@ -75,11 +78,13 @@ class atmgui extends JFrame implements ActionListener {
     JButton submit = new JButton("Submit"); //submit on welcome page
     JButton numbpan[];
     JButton continues = new JButton("Continue");
-    JButton wihtdraw = new JButton("Withdraw");
+    JButton withdraw = new JButton("Withdraw");
     JButton deposit = new JButton("Deposit");
     JButton clear = new JButton("CLEAR");
     JButton zero = new JButton("0");
-
+    JButton home = new JButton("GO BACK HOME");
+    JButton cancel = new JButton("CANCEL");
+    JButton cancel1 = new JButton("CANCEL");
     Container c;
 
     CardLayout card = new CardLayout();
@@ -136,7 +141,7 @@ class atmgui extends JFrame implements ActionListener {
         c.setLayout(card);
         
         welcome.setBounds(150, 10, 650, 100);    // welcome is a jlabel
-        welcome.setFont(new Font("Arial", Font.BOLD, 30));
+        welcome.setFont(new Font("Rockwell Extra Bold", Font.BOLD, 30));
         welcomepanel2.add(welcome); 
 
         //welcomepanel2 has all the elements
@@ -151,6 +156,7 @@ class atmgui extends JFrame implements ActionListener {
         welcomepanel2.add(acno);
         acno.setForeground(Color.BLUE);
         acno.setBackground(Color.LIGHT_GRAY);
+        
 
         submit.setBounds(350, 390, 150, 25); // submit is a button
         submit.addActionListener(this);
@@ -159,11 +165,21 @@ class atmgui extends JFrame implements ActionListener {
         welcomepanel2.add(submit);
 
         acc_doesnt_exist.setBounds(330, 420, 230, 25);
-        acc_doesnt_exist.setFont(new Font("Verdana", Font.ITALIC, 18));
+        acc_doesnt_exist.setFont(new Font("Rockwell", Font.ITALIC, 18));
         acc_doesnt_exist.setForeground(Color.RED);
         acc_doesnt_exist.setVisible(false);
         welcomepanel2.add(acc_doesnt_exist);
         
+        img.setIcon(new ImageIcon("resources\\Capture300.jpg"));
+        img.setBounds(275,50,300,300);
+        welcomepanel2.add(img);
+
+        slogan.setBounds(225, 500, 650, 100);    
+        slogan.setFont(new Font("Rockwell", Font.ITALIC ,24));
+        slogan.setForeground(Color.PINK);
+        welcomepanel2.add(slogan); 
+
+        welcomepanel2.setBounds(-10, 0, 850, 700);
         welcomepanel2.setLayout(null);
         welcomepanel2.setBounds(-10, 0, 850, 700);
         welcomepanel2.setBackground(Color.DARK_GRAY);
@@ -178,10 +194,10 @@ class atmgui extends JFrame implements ActionListener {
         
         hello.setForeground(Color.ORANGE);
         pinpanel2.add(hello);
-        hello.setFont(new Font("Verdana", Font.BOLD, 30));
+        hello.setFont(new Font("MS PGothic", Font.BOLD, 30));
         hello.setBounds(280, 100, 450, 50);
         
-        enterpinlabel.setFont(new Font("Verdana", Font.BOLD, 20)); //setting font for enterpin
+        enterpinlabel.setFont(new Font("Impact", Font.BOLD, 20)); //setting font for enterpin
         enterpinlabel.setForeground(Color.GREEN); //setting its color to orange
         enterpinlabel.setBounds(320,200,200,40);
         
@@ -216,9 +232,9 @@ class atmgui extends JFrame implements ActionListener {
         zero.addActionListener(this);
         zero.setBounds(385, 420, 60, 40);
 
-        incorrect_pin.setBounds(350, 550, 180, 25);
+        incorrect_pin.setBounds(350, 595, 180, 25);
         incorrect_pin.setVisible(false);
-        incorrect_pin.setFont(new Font("Verdana", Font.BOLD, 20));
+        incorrect_pin.setFont(new Font("Rockwell Extra Bold", Font.ITALIC, 20));
         incorrect_pin.setForeground(Color.RED);
         pinpanel2.add(incorrect_pin);
 
@@ -228,9 +244,14 @@ class atmgui extends JFrame implements ActionListener {
 
         pinpanel2.add(clear);
         clear.addActionListener(this);
-        clear.setBounds(440, 480, 80, 40);
+        clear.setBounds(430, 480, 80, 40);
         clear.setBackground(Color.RED);
         clear.setForeground(Color.BLACK);
+
+        pinpanel2.add(cancel);
+        cancel.addActionListener(this);
+        cancel.setBounds(370, 540, 100, 40);
+        cancel.setBackground(Color.PINK);
 
 //////////////////////////////////////pin panel ends///////////////////////////////////////
         
@@ -246,16 +267,16 @@ class atmgui extends JFrame implements ActionListener {
         withlabel.setBounds(280,200,450,50);
 
         withpanel.add(balanceLabel);
-        balanceLabel.setBounds(318, 235, 450, 50);
-        balanceLabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        balanceLabel.setBounds(350, 235, 450, 50);
+        balanceLabel.setFont(new Font("Trebuchet MS", Font.BOLD, 20));
         balanceLabel.setForeground(Color.GREEN);
 
         withpanel.add(withamt);
         withamt.setBounds(350,300,140,30);
 
-        withpanel.add(wihtdraw);
-        wihtdraw.addActionListener(this);
-        wihtdraw.setBounds(370, 380, 100, 35);
+        withpanel.add(withdraw);
+        withdraw.addActionListener(this);
+        withdraw.setBounds(370, 380, 100, 35);
 
         withpanel.add(deposit);
         deposit.addActionListener(this);
@@ -263,9 +284,14 @@ class atmgui extends JFrame implements ActionListener {
 
         withpanel.add(insuff_bal);
         insuff_bal.setBounds(320, 460, 250, 45);
-        insuff_bal.setFont(new Font("Verdana", Font.BOLD, 20));
+        insuff_bal.setFont(new Font("Impact", Font.BOLD, 20));
         insuff_bal.setForeground(Color.RED);
         insuff_bal.setVisible(false);
+
+        withpanel.add(cancel1);
+        cancel1.addActionListener(this);
+        cancel1.setBounds(370, 480, 100, 35);
+        cancel1.setBackground(Color.PINK);
 
 //////////////////////////////////////Withdraw page ends//////////////////////////////////////
 
@@ -276,14 +302,21 @@ class atmgui extends JFrame implements ActionListener {
         thankyou.setForeground(Color.YELLOW);
 
         thankyou.setBounds(280, 25, 550, 100);    // welcome is a jlabel
-        thankyou.setFont(new Font("Arial", Font.BOLD, 30));
+        thankyou.setFont(new Font("Rockwell", Font.BOLD, 30));
 
         thankyoupanel.add(remaininglabel);
         thankyoupanel.setLayout(null);
-        remaininglabel.setBounds(280, 250, 400, 100);
-        remaininglabel.setFont(new Font("Verdana", Font.BOLD, 20));
+        remaininglabel.setBounds(300, 300, 400, 100);
+        remaininglabel.setFont(new Font("MS PGothic", Font.BOLD, 20));
         remaininglabel.setForeground(Color.MAGENTA);
 
+        img1.setIcon(new ImageIcon("resources\\Capture300.jpg"));
+        img1.setBounds(275,50,300,300);
+        thankyoupanel.add(img1);
+
+        thankyoupanel.add(home);
+        home.setBounds(350,400,160,40);
+        home.addActionListener(this);
         c.add(thankyoupanel);
 
 //////////////////////////////////Thank you page ends/////////////////////////////////////////
@@ -324,7 +357,7 @@ class atmgui extends JFrame implements ActionListener {
 
             try{
 
-                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", "joju9090");
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
                 
@@ -372,16 +405,16 @@ class atmgui extends JFrame implements ActionListener {
                 incorrect_pin.setVisible(true);
                 enterpin.setForeground(Color.RED);
                 attempts += 1;
-                System.out.println(attempts);
+        
 
                 if(attempts == 4)
                     System.exit(1);
             }
         }
 
-        if(e.getSource() == wihtdraw){
+        if(e.getSource() == withdraw){
 
-            if(Double.parseDouble(withamt.getText()) <= balance && Double.parseDouble(withamt.getText()) > 100 && Double.parseDouble(withamt.getText()) % 100 == 0){
+            if(Double.parseDouble(withamt.getText()) <= balance && Double.parseDouble(withamt.getText()) >= 100 && Double.parseDouble(withamt.getText()) % 100 == 0){
 
                 double remaining = balance - Double.parseDouble(withamt.getText());
                 
@@ -447,9 +480,19 @@ class atmgui extends JFrame implements ActionListener {
 
                 }
             }
-            else{
+        
+        }
+        if(e.getSource() == home||e.getSource()== cancel||e.getSource()== cancel1){
 
-            }
+            card.first(c);
+            attempts=0;
+            enterpin.setText(null);
+            acno.setText(null);
+            acc_doesnt_exist.setVisible(false);
+            remaininglabel.setText("Remaining Balance: ");
+            balanceLabel.setText("Balance: ");
+            withamt.setText(null);
+
         }
     }
 
