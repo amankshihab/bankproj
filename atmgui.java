@@ -358,7 +358,7 @@ class atmgui extends JFrame implements ActionListener {
 
             try{
 
-                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", "joju9090");
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
                 
