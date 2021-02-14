@@ -196,11 +196,11 @@ class atmgui extends JFrame implements ActionListener {
         hello.setForeground(Color.ORANGE);
         pinpanel2.add(hello);
         hello.setFont(new Font("MS PGothic", Font.BOLD, 30));
-        hello.setBounds(280, 100, 450, 50);
+        hello.setBounds(320, 100, 450, 50);
         
         enterpinlabel.setFont(new Font("Impact", Font.BOLD, 20)); //setting font for enterpin
         enterpinlabel.setForeground(Color.GREEN); //setting its color to orange
-        enterpinlabel.setBounds(320,200,200,40);
+        enterpinlabel.setBounds(345,200,200,40);
         
         enterpin.setBounds(355,250,120,40);
         enterpin.setText("");
@@ -233,9 +233,9 @@ class atmgui extends JFrame implements ActionListener {
         zero.addActionListener(this);
         zero.setBounds(385, 420, 60, 40);
 
-        incorrect_pin.setBounds(350, 595, 180, 25);
+        incorrect_pin.setBounds(360, 595, 180, 25);
         incorrect_pin.setVisible(false);
-        incorrect_pin.setFont(new Font("Rockwell Extra Bold", Font.ITALIC, 20));
+        incorrect_pin.setFont(new Font("IMPACT", Font.BOLD, 20));
         incorrect_pin.setForeground(Color.RED);
         pinpanel2.add(incorrect_pin);
 
@@ -284,7 +284,7 @@ class atmgui extends JFrame implements ActionListener {
         deposit.setBounds(370, 420, 100, 35);
 
         withpanel.add(insuff_bal);
-        insuff_bal.setBounds(320, 460, 250, 45);
+        insuff_bal.setBounds(335, 540, 250, 45);
         insuff_bal.setFont(new Font("Impact", Font.BOLD, 20));
         insuff_bal.setForeground(Color.RED);
         insuff_bal.setVisible(false);
@@ -302,7 +302,7 @@ class atmgui extends JFrame implements ActionListener {
         thankyoupanel.setBackground(Color.DARK_GRAY);
         thankyou.setForeground(Color.YELLOW);
 
-        thankyou.setBounds(280, 25, 550, 100);    // welcome is a jlabel
+        thankyou.setBounds(300, 25, 550, 100);    // welcome is a jlabel
         thankyou.setFont(new Font("Rockwell", Font.BOLD, 30));
 
         thankyoupanel.add(remaininglabel);
@@ -358,7 +358,7 @@ class atmgui extends JFrame implements ActionListener {
 
             try{
 
-                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", System.getenv("postgres_pass"));
+                conn = DriverManager.getConnection("jdbc:postgresql://localhost/tightwad", "postgres", "joju9090");
                 Statement st = conn.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM atminfo where custno=\'" + acno.getText() + "\';");
                 
